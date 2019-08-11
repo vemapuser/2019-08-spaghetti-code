@@ -90,12 +90,20 @@ function outputResult($day, $month, $year, string $weekDay): void {
     echo "Berechnung Algorithmus: Wochentag='{$weekDay}'\n";
 }
 
-setlocale(LC_TIME, 'de_AT.utf-8');
+/**
+ * @param $argv
+ * @return int
+ */
+function main($argv): int {
+    setlocale(LC_TIME, 'de_AT.utf-8');
+    list($day, $month, $year, $debug) = handleCommandLine($argv);
 
-list($day, $month, $year, $debug) = handleCommandLine($argv);
+    $weekDayNumber = dateToWeekdayNumber($day, $month, $year, $debug);
+    $weekDay = weekdayNumberToWeekday($weekDayNumber);
 
-$weekDayNumber = dateToWeekdayNumber($day, $month, $year, $debug);
+    outputResult($day, $month, $year, $weekDay);
+    return 0;
+}
 
-$weekDay = weekdayNumberToWeekday($weekDayNumber);
+return main($argv);
 
-outputResult($day, $month, $year, $weekDay);
