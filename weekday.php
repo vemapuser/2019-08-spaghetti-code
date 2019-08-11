@@ -39,25 +39,38 @@ function weekdayNumberToWeekday(int $weekDayNumber) : string {
     return $weekDay;
 }
 
-$d = $day;
-$m = 0;
-$m = (($month - 2 - 1 ) + 12 ) % 12 + 1 ; // this is because of the modulo
-$c = substr($year, 0, 2);
-if($m>=11) {
-    $c = substr($year-1, 0, 2);
-}
-$y = substr($year, 2, 2);
-if($m>=11) {
-    $y = substr($year-1, 2, 2);
+/**
+ * @param $day
+ * @param $month
+ * @param $year
+ * @return int
+ */
+function dateToWeekdayNumber($day, $month, $year, bool $debug=false): int {
+    $d = $day;
+    $m = 0;
+    $m = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
+    $c = substr($year, 0, 2);
+    if ($m >= 11) {
+        $c = substr($year - 1, 0, 2);
+    }
+    $y = substr($year, 2, 2);
+    if ($m >= 11) {
+        $y = substr($year - 1, 2, 2);
+    }
+
+    $weekDayNumber = ($d + intval(2.6 * $m - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
+    if ($debug) {
+        echo "DEBUG: m={$m} y={$y} c={$c}\n";
+    }
+    return $weekDayNumber;
 }
 
-$weekDayNumber = ($d + intval (2.6 * $m - 0.2) + $y  + intval ($y/4) + intval ($c/4) - 2*$c ) % 7;
+$debug = ($argc > 4 && ($argv[4] == '-d' || $argv[4] == '--debug'));
+
+$weekDayNumber = dateToWeekdayNumber($day, $month, $year, $debug);
 
 $weekDay = weekdayNumberToWeekday($weekDayNumber);
 
 echo "Eingabe: {$day}.{$month}.{$year}\n";
 echo strftime("Berechnung PHP: Wochentag='%A'\n",strtotime("$year-$month-$day"));
 echo "Berechnung Algorithmus: Wochentag='{$weekDay}'\n";
-if($argc>4 && ( $argv[4]=='-d' || $argv[4]=='--debug')) {
-    echo "DEBUG: m={$m} y={$y} c={$c}\n";
-}
