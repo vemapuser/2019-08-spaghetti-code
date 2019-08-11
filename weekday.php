@@ -15,6 +15,30 @@ if($argc<4 || $argc>5) {
     exit(1);
 }
 
+/**
+ * @param int $weekDayNumber
+ * @return string
+ */
+function weekdayNumberToWeekday(int $weekDayNumber) : string {
+    $weekDayNames = [
+        6 => "Montag",
+        5 => "Dienstag",
+        4 => "Mittwoch",
+        3 => "Donnerstag",
+        2 => "Freitag",
+        1 => "Samstag",
+        0 => "Sonntag",
+    ];
+
+    if (isset($weekDayNames[$weekDayNumber])) {
+        $weekDay = $weekDayNames[$weekDayNumber];
+    } else {
+        echo "Error: Unknown w={$weekDayNumber}\n";
+        exit(1);
+    }
+    return $weekDay;
+}
+
 $d = $day;
 $m = 0;
 $m = (($month - 2 - 1 ) + 12 ) % 12 + 1 ; // this is because of the modulo
@@ -29,22 +53,7 @@ if($m>=11) {
 
 $weekDayNumber = ($d + intval (2.6 * $m - 0.2) + $y  + intval ($y/4) + intval ($c/4) - 2*$c ) % 7;
 
-$weekDayNames = [
-    6 => "Montag",
-    5 => "Dienstag",
-    4 => "Mittwoch",
-    3 => "Donnerstag",
-    2 => "Freitag",
-    1 => "Samstag",
-    0 => "Sonntag",
-];
-
-if(isset($weekDayNames[$weekDayNumber])) {
-    $weekDay = $weekDayNames[$weekDayNumber];
-} else {
-    echo "Error: Unknown w={$weekDayNumber}\n";
-    exit(1);
-}
+$weekDay = weekdayNumberToWeekday($weekDayNumber);
 
 echo "Eingabe: {$day}.{$month}.{$year}\n";
 echo strftime("Berechnung PHP: Wochentag='%A'\n",strtotime("$year-$month-$day"));
