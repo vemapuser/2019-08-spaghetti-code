@@ -24,14 +24,15 @@ class Date {
 }
 
 /**
+ * @param $argv
  * @return array
+ * @throws Exception
  */
 function handleCommandLine($argv): array {
 
     $argc = count($argv);
     if ($argc < 4 || $argc > 5) {
-        echo "Wrong number of arguments.";
-        exit(1);
+        throw new Exception("Wrong number of arguments.");
     }
 
     $day = $argv[1];
@@ -51,6 +52,7 @@ function handleCommandLine($argv): array {
 /**
  * @param int $weekDayNumber
  * @return string
+ * @throws Exception
  */
 function weekdayNumberToWeekday(int $weekDayNumber) : string {
     $weekDayNames = [
@@ -66,8 +68,7 @@ function weekdayNumberToWeekday(int $weekDayNumber) : string {
     if (isset($weekDayNames[$weekDayNumber])) {
         $weekDay = $weekDayNames[$weekDayNumber];
     } else {
-        echo "Error: Unknown w={$weekDayNumber}\n";
-        exit(1);
+        throw new Exception("Error: Unknown w={$weekDayNumber}\n");
     }
     return $weekDay;
 }
@@ -111,16 +112,26 @@ function outputResult(Date $date, string $weekDay): void {
 /**
  * @param $argv
  * @return int
+ * @throws Exception
  */
 function main($argv): int {
+    $exitCode=0;
+
     setlocale(LC_TIME, 'de_AT.utf-8');
-    list($inputDate, $debug) = handleCommandLine($argv);
 
-    $weekDayNumber = dateToWeekdayNumber($inputDate, $debug);
-    $weekDay = weekdayNumberToWeekday($weekDayNumber);
+    try {
+        list($inputDate, $debug) = handleCommandLine($argv);
 
-    outputResult($inputDate, $weekDay);
-    return 0;
+        $weekDayNumber = dateToWeekdayNumber($inputDate, $debug);
+        $weekDay = weekdayNumberToWeekday($weekDayNumber);
+
+        outputResult($inputDate, $weekDay);
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        $exitCode=1;
+    }
+
+    return $exitCode;
 }
 
 return main($argv);
