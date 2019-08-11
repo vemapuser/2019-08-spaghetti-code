@@ -4,15 +4,28 @@
  * Wochentagsberechnung nach https://de.wikipedia.org/wiki/Wochentagsberechnung
  */
 
-setlocale(LC_TIME, 'de_AT.utf-8');
+/**
+ * @return array
+ */
+function handleCommandLine($argv): array {
 
-$day = $argv[1];
-$month = $argv[2];
-$year = $argv[3]; /* muss vierstellig sein */
+    $argc = count($argv);
+    if ($argc < 4 || $argc > 5) {
+        echo "Wrong number of arguments.";
+        exit(1);
+    }
 
-if($argc<4 || $argc>5) {
-    echo "Wrong number of arguments.";
-    exit(1);
+    $day = $argv[1];
+    $month = $argv[2];
+    $year = $argv[3]; /* muss vierstellig sein */
+
+    if(isset($argv[4]) && ($argv[4] == '-d' || $argv[4] == '--debug')) {
+        $debug = true;
+    } else {
+        $debug = false;
+    }
+
+    return [$day, $month, $year, $debug];
 }
 
 /**
@@ -77,7 +90,9 @@ function outputResult($day, $month, $year, string $weekDay): void {
     echo "Berechnung Algorithmus: Wochentag='{$weekDay}'\n";
 }
 
-$debug = ($argc > 4 && ($argv[4] == '-d' || $argv[4] == '--debug'));
+setlocale(LC_TIME, 'de_AT.utf-8');
+
+list($day, $month, $year, $debug) = handleCommandLine($argv);
 
 $weekDayNumber = dateToWeekdayNumber($day, $month, $year, $debug);
 
