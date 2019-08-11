@@ -4,6 +4,25 @@
  * Wochentagsberechnung nach https://de.wikipedia.org/wiki/Wochentagsberechnung
  */
 
+class Date {
+
+    public $day;
+    public $month;
+    public $year;
+
+    /**
+     * Date constructor.
+     * @param $day
+     * @param $month
+     * @param $year
+     */
+    public function __construct($day, $month, $year) {
+        $this->day = $day;
+        $this->month = $month;
+        $this->year = $year;
+    }
+}
+
 /**
  * @return array
  */
@@ -18,6 +37,7 @@ function handleCommandLine($argv): array {
     $day = $argv[1];
     $month = $argv[2];
     $year = $argv[3]; /* muss vierstellig sein */
+    $date = new Date($day, $month, $year);
 
     if(isset($argv[4]) && ($argv[4] == '-d' || $argv[4] == '--debug')) {
         $debug = true;
@@ -25,7 +45,7 @@ function handleCommandLine($argv): array {
         $debug = false;
     }
 
-    return [$day, $month, $year, $debug];
+    return [$date, $debug];
 }
 
 /**
@@ -58,17 +78,17 @@ function weekdayNumberToWeekday(int $weekDayNumber) : string {
  * @param $year
  * @return int
  */
-function dateToWeekdayNumber($day, $month, $year, bool $debug=false): int {
-    $d = $day;
+function dateToWeekdayNumber($date, bool $debug=false): int {
+    $d = $date->day;
     $m = 0;
-    $m = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
-    $c = substr($year, 0, 2);
+    $m = (($date->month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
+    $c = substr($date->year, 0, 2);
     if ($m >= 11) {
-        $c = substr($year - 1, 0, 2);
+        $c = substr($date->year - 1, 0, 2);
     }
-    $y = substr($year, 2, 2);
+    $y = substr($date->year, 2, 2);
     if ($m >= 11) {
-        $y = substr($year - 1, 2, 2);
+        $y = substr($date->year - 1, 2, 2);
     }
 
     $weekDayNumber = ($d + intval(2.6 * $m - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
@@ -79,14 +99,12 @@ function dateToWeekdayNumber($day, $month, $year, bool $debug=false): int {
 }
 
 /**
- * @param $day
- * @param $month
- * @param $year
+ * @param Date $date
  * @param string $weekDay
  */
-function outputResult($day, $month, $year, string $weekDay): void {
-    echo "Eingabe: {$day}.{$month}.{$year}\n";
-    echo strftime("Berechnung PHP: Wochentag='%A'\n", strtotime("$year-$month-$day"));
+function outputResult(Date $date, string $weekDay): void {
+    echo "Eingabe: {$date->day}.{$date->month}.{$date->year}\n";
+    echo strftime("Berechnung PHP: Wochentag='%A'\n", strtotime("{$date->year}-{$date->month}-{$date->day}"));
     echo "Berechnung Algorithmus: Wochentag='{$weekDay}'\n";
 }
 
@@ -96,12 +114,12 @@ function outputResult($day, $month, $year, string $weekDay): void {
  */
 function main($argv): int {
     setlocale(LC_TIME, 'de_AT.utf-8');
-    list($day, $month, $year, $debug) = handleCommandLine($argv);
+    list($inputDate, $debug) = handleCommandLine($argv);
 
-    $weekDayNumber = dateToWeekdayNumber($day, $month, $year, $debug);
+    $weekDayNumber = dateToWeekdayNumber($inputDate, $debug);
     $weekDay = weekdayNumberToWeekday($weekDayNumber);
 
-    outputResult($day, $month, $year, $weekDay);
+    outputResult($inputDate, $weekDay);
     return 0;
 }
 
