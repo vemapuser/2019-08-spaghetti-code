@@ -65,12 +65,22 @@ function dateToWeekdayNumber($day, $month, $year, bool $debug=false): int {
     return $weekDayNumber;
 }
 
+/**
+ * @param $day
+ * @param $month
+ * @param $year
+ * @param string $weekDay
+ */
+function outputResult($day, $month, $year, string $weekDay): void {
+    echo "Eingabe: {$day}.{$month}.{$year}\n";
+    echo strftime("Berechnung PHP: Wochentag='%A'\n", strtotime("$year-$month-$day"));
+    echo "Berechnung Algorithmus: Wochentag='{$weekDay}'\n";
+}
+
 $debug = ($argc > 4 && ($argv[4] == '-d' || $argv[4] == '--debug'));
 
 $weekDayNumber = dateToWeekdayNumber($day, $month, $year, $debug);
 
 $weekDay = weekdayNumberToWeekday($weekDayNumber);
 
-echo "Eingabe: {$day}.{$month}.{$year}\n";
-echo strftime("Berechnung PHP: Wochentag='%A'\n",strtotime("$year-$month-$day"));
-echo "Berechnung Algorithmus: Wochentag='{$weekDay}'\n";
+outputResult($day, $month, $year, $weekDay);
