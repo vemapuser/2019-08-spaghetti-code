@@ -21,12 +21,12 @@ if($argc<4 || $argc>5) {
  */
 function weekdayNumberToWeekday(int $weekDayNumber) : string {
     $weekDayNames = [
-        6 => "Montag",
-        5 => "Dienstag",
-        4 => "Mittwoch",
-        3 => "Donnerstag",
-        2 => "Freitag",
-        1 => "Samstag",
+        1 => "Montag",
+        2 => "Dienstag",
+        3 => "Mittwoch",
+        4 => "Donnerstag",
+        5 => "Freitag",
+        6 => "Samstag",
         0 => "Sonntag",
     ];
 
