@@ -15,7 +15,7 @@ function handleCommandLine($argv): array {
 
     $argc = count($argv);
     if ($argc < 4 || $argc > 5) {
-        throw new Exception("Wrong number of arguments.");
+        throw new Exception("Syntax: {$argv[0]} <Tag> <Monat> <Jahr> [ -d ]");
     }
 
     $day = $argv[1];
