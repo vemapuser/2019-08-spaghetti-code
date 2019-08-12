@@ -100,9 +100,10 @@ function dateToWeekdayNumber($date, bool $debug=false): int {
  * @return bool|string
  */
 function calculateY($date, int $m) {
-    $y = substr($date->year, 2, 2);
     if ($m >= 11) {
         $y = substr($date->year - 1, 2, 2);
+    } else {
+        $y = substr($date->year, 2, 2);
     }
     return $y;
 }
@@ -113,9 +114,10 @@ function calculateY($date, int $m) {
  * @return bool|string
  */
 function calculateC($date, int $m) {
-    $c = substr($date->year, 0, 2);
     if ($m >= 11) {
         $c = substr($date->year - 1, 0, 2);
+    } else {
+        $c = substr($date->year, 0, 2);
     }
     return $c;
 }
