@@ -82,21 +82,42 @@ function weekdayNumberToWeekday(int $weekDayNumber) : string {
 function dateToWeekdayNumber($date, bool $debug=false): int {
     $d = $date->day;
     $m = calculateM($date);
-    $c = substr($date->year, 0, 2);
+    $c = calculateC($date, $m);
+    $y = calculateY($date, $m);
 
-    if ($m >= 11) {
-        $c = substr($date->year - 1, 0, 2);
+    $weekDayNumber = ($d + intval(2.6 * $m - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
+
+    if ($debug) {
+        echo "DEBUG: m={$m} y={$y} c={$c}\n";
     }
+
+    return $weekDayNumber;
+}
+
+/**
+ * @param $date
+ * @param int $m
+ * @return bool|string
+ */
+function calculateY($date, int $m) {
     $y = substr($date->year, 2, 2);
     if ($m >= 11) {
         $y = substr($date->year - 1, 2, 2);
     }
+    return $y;
+}
 
-    $weekDayNumber = ($d + intval(2.6 * $m - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
-    if ($debug) {
-        echo "DEBUG: m={$m} y={$y} c={$c}\n";
+/**
+ * @param $date
+ * @param int $m
+ * @return bool|string
+ */
+function calculateC($date, int $m) {
+    $c = substr($date->year, 0, 2);
+    if ($m >= 11) {
+        $c = substr($date->year - 1, 0, 2);
     }
-    return $weekDayNumber;
+    return $c;
 }
 
 /**
