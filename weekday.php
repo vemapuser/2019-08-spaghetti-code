@@ -55,3 +55,4 @@ echo "Berechnung Algorithmus: Wochentag='{$x}'\n";
 if($argc>4 && ( $argv[4]=='-d' || $argv[4]=='--debug')) {
     echo "DEBUG: m={$m} y={$y} c={$c}\n";
 }
+
