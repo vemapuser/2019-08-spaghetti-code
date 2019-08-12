@@ -20,7 +20,8 @@ function handleCommandLine($argv): array {
 
     $day = $argv[1];
     $month = $argv[2];
-    $year = $argv[3]; /* muss vierstellig sein */
+    $year = $argv[3];
+
     $date = new Date($day, $month, $year);
 
     if(isset($argv[4]) && ($argv[4] == '-d' || $argv[4] == '--debug')) {
