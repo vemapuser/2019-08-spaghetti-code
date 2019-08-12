@@ -81,8 +81,9 @@ function weekdayNumberToWeekday(int $weekDayNumber) : string {
  */
 function dateToWeekdayNumber($date, bool $debug=false): int {
     $d = $date->day;
-    $m = (($date->month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
+    $m = calculateM($date);
     $c = substr($date->year, 0, 2);
+
     if ($m >= 11) {
         $c = substr($date->year - 1, 0, 2);
     }
@@ -96,6 +97,16 @@ function dateToWeekdayNumber($date, bool $debug=false): int {
         echo "DEBUG: m={$m} y={$y} c={$c}\n";
     }
     return $weekDayNumber;
+}
+
+/**
+ * @param $date
+ * @return int
+ */
+function calculateM($date): int {
+    // remove and add 1 before and after the modulo because we have 1-based counting
+    $m = (($date->month - 2 - 1) + 12) % 12 + 1;
+    return $m;
 }
 
 /**
