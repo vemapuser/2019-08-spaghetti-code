@@ -4,6 +4,13 @@
  * Wochentagsberechnung nach https://de.wikipedia.org/wiki/Wochentagsberechnung
  */
 
+function getWeekdayName(int $w)
+{
+    $weekDayNames = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+    $weekday = $weekDayNames[$w];
+    return $weekday;
+}
+
 setlocale(LC_TIME, 'de_AT.utf-8');
 
 $day = $argv[1];
@@ -27,8 +34,7 @@ if($m>=11) {
 
 $w = ($day + intval (2.6 * $m - 0.2) + $y  + intval ($y/4) + intval ($c/4) - 2*$c ) % 7;
 
-$weekDayNames = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
-$weekday = $weekDayNames[$w];
+$weekday = getWeekdayName($w);
 
 echo "Eingabe: {$day}.{$month}.{$year}\n";
 echo strftime("Berechnung PHP: Wochentag='%A'\n",strtotime("$year-$month-$day"));
