@@ -28,24 +28,10 @@ if($m>=11) {
 }
 
 $w = ($d + intval (2.6 * $m - 0.2) + $y  + intval ($y/4) + intval ($c/4) - 2*$c ) % 7;
-if($w == 1) {
-    $weekday = "Montag";
-} elseif($w == 2) {
-    $weekday = "Dienstag";
-} elseif($w == 3) {
-    $weekday = "Mittwoch";
-} elseif($w == 4) {
-    $weekday = "Donnerstag";
-} elseif($w == 5) {
-    $weekday = "Freitag";
-} elseif($w == 6) {
-    $weekday = "Samstag";
-} elseif($w == 0) {
-    $weekday = "Sonntag";
-} else {
-    echo "Error: Unknown w={$w}\n";
-    exit(1);
-}
+
+$weekDayNames = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+$weekday = $weekDayNames[$w];
+
 echo "Eingabe: {$day}.{$month}.{$year}\n";
 echo strftime("Berechnung PHP: Wochentag='%A'\n",strtotime("$year-$month-$day"));
 echo "Berechnung Algorithmus: Wochentag='{$weekday}'\n";
